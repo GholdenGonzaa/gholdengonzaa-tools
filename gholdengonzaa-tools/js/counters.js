@@ -36,6 +36,10 @@
   const immuneList = document.getElementById('immuneList');
   const immuneBox = document.getElementById('immuneBox');
   const countersList = document.getElementById('countersList');
+  const btnTrickRoom = document.getElementById('btnTrickRoom');
+
+  let trickRoomActive = false;
+  let lastSelectedPoke = null;
 
   // Multiplier calculation for a defender's types against an attacking type
   function getMultiplier(defenderTypes, attackerType) {
@@ -100,26 +104,45 @@
     }
 
     // Find Counters in roster
-    // A counter has a STAB type that is super effective against this pokemon
-    // We'll just grab the first 10 for performance/display
-    const weakTypes = eff.weaknesses.map(w => w.type);
+    // A counter should:
+    // 1. Have a STAB advantage
+    // 2. NOT be weak to the target's STABs
+    // 3. Ideally be faster, or very resistant
     const suggestedCounters = POKEMON_DATA.filter(p => {
       if (p.id === poke.id) return false;
-      // Does it have a type that the defender is weak to?
+      
+      // Offensive advantage
       const hasSuperEffectiveSTAB = p.types.some(t => weakTypes.includes(t));
       if (!hasSuperEffectiveSTAB) return false;
-      // Does it resist the defender's STABs? (Optional, but makes it a better counter)
-      // We'll just check if it's not weak to the defender's primary STAB
-      const multFromDefender = getMultiplier(p.types, poke.types[0]);
-      return multFromDefender <= 1;
-    }).slice(0, 8);
+
+      // Defensive check: Must not be weak to defender's primary or secondary STAB
+      const multFromSTAB1 = getMultiplier(p.types, poke.types[0]);
+      const multFromSTAB2 = poke.types[1] ? getMultiplier(p.types, poke.types[1]) : 0;
+      
+      // If it's weak to ANY of the target's STABs, it's not a safe counter
+      if (multFromSTAB1 > 1 || multFromSTAB2 > 1) return false;
+
+      // Speed check: 
+      // Standard: Faster is better. If slower, must resist STAB.
+      // Trick Room: Slower is better. If faster, must resist STAB.
+      const effectivelyFaster = trickRoomActive ? (p.speed < poke.speed) : (p.speed > poke.speed);
+      
+      if (!effectivelyFaster && multFromSTAB1 >= 1) return false;
+
+      return true;
+    })
+    .sort((a, b) => {
+      return trickRoomActive ? (a.speed - b.speed) : (b.speed - a.speed);
+    })
+    .slice(0, 8);
 
     countersList.innerHTML = suggestedCounters.map(p => {
       const name = p.displayName || p.name;
       return `
-      <div class="poke-card" onclick="selectPokemonById(${POKEMON_DATA.indexOf(p)})" style="height: auto; padding-bottom: 4px; cursor: pointer; display: flex; flex-direction: column;">
+      <div class="poke-card" onclick="selectPokemonById(${POKEMON_DATA.indexOf(p)})" style="height: auto; padding-bottom: 4px; cursor: pointer; display: flex; flex-direction: column; position: relative;">
         <img src="${spriteUrl(p.id)}" alt="${name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';">
         <span style="font-size: 0.65rem; font-weight: bold; color: var(--gold); text-align: center; line-height: 1; margin-top: -4px;">${name}</span>
+        <span style="position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.7); font-size: 0.5rem; color: white; padding: 1px 3px; border-radius: 4px;">S:${p.speed}</span>
       </div>
       `;
     }).join('');
@@ -146,6 +169,7 @@
     resultsArea.style.display = 'flex';
     searchResults.innerHTML = '';
     searchInput.value = '';
+    lastSelectedPoke = poke;
   }
 
   function renderSearch() {
@@ -209,6 +233,22 @@
       }
     }
   });
+
+  if (btnTrickRoom) {
+    btnTrickRoom.addEventListener('click', () => {
+      trickRoomActive = !trickRoomActive;
+      if (trickRoomActive) {
+        btnTrickRoom.style.background = 'var(--violet)';
+        btnTrickRoom.style.color = 'white';
+        btnTrickRoom.textContent = '🔮 Trick Room ON';
+      } else {
+        btnTrickRoom.style.background = 'var(--surface-3)';
+        btnTrickRoom.style.color = 'var(--text-muted)';
+        btnTrickRoom.textContent = '⌛ Espacio Raro (TR)';
+      }
+      if (lastSelectedPoke) selectPokemon(lastSelectedPoke);
+    });
+  }
 
   // Auto-select on load
   const params = new URLSearchParams(window.location.search);
