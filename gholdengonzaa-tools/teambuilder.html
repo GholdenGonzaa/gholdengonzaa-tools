@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Builder Pokémon Champions | GholdenGonzaa</title>
+  <meta name="description" content="Constructor de equipos competitivo para Pokémon Champions. Analizá debilidades y resistencias.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .builder-header { text-align: center; padding: 40px 20px 20px; }
+    .builder-header h1 { font-family: var(--font-display); color: var(--gold); font-size: 3rem; letter-spacing: 2px; }
+    
+    .team-section { background: var(--surface); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 24px; }
+    .team-slots { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px; }
+    .team-slot { width: 100px; height: 100px; border: 2px dashed var(--surface-3); border-radius: var(--radius-sm); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; cursor: pointer; transition: 0.2s; background: var(--surface-2); }
+    .team-slot:hover { border-color: var(--gold); }
+    .team-slot img { width: 60px; height: 60px; image-rendering: pixelated; }
+    .team-slot .remove-btn { position: absolute; top: 4px; right: 4px; background: var(--error); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; cursor: pointer; display: none; }
+    .team-slot.filled .remove-btn { display: block; }
+    .team-slot.filled { border-style: solid; border-color: var(--surface-3); }
+
+    .analysis-section { background: var(--surface); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 24px; }
+    .matrix-container { overflow-x: auto; margin-top: 16px; border-radius: var(--radius-sm); border: 1px solid var(--surface-3); }
+    .matrix-table { width: 100%; border-collapse: collapse; text-align: center; background: var(--surface-2); font-size: 0.85rem; }
+    .matrix-table th, .matrix-table td { padding: 6px; border: 1px solid var(--surface-3); min-width: 40px; }
+    .matrix-table th { background: var(--surface-3); color: var(--gold); font-family: var(--font-display); letter-spacing: 1px; font-weight: normal; font-size: 1.1rem; position: sticky; top: 0; z-index: 2; }
+    .matrix-table th:first-child { position: sticky; left: 0; z-index: 3; background: var(--surface-3); text-align: left; padding-left: 12px; min-width: 100px; }
+    .matrix-table td:first-child { position: sticky; left: 0; background: var(--surface-2); z-index: 1; text-align: left; padding-left: 12px; border-right: 2px solid var(--surface-3); }
+    .matrix-table .col-total { font-weight: bold; background: rgba(0,0,0,0.2); border-left: 2px solid var(--surface-3); }
+    
+    .cell-x4 { background: #7f1d1d !important; color: white; font-weight: bold; }
+    .cell-x2 { background: #b91c1c !important; color: white; }
+    .cell-x1 { color: var(--text-muted); }
+    .cell-x05 { background: #15803d !important; color: white; }
+    .cell-x025 { background: #14532d !important; color: white; font-weight: bold; }
+    .cell-x0 { background: #1e3a8a !important; color: white; font-weight: bold; }
+    
+    .team-header-img { width: 32px; height: 32px; margin: 0 auto; image-rendering: pixelated; display: block; }
+
+    .roster-section { background: var(--surface); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); }
+    .roster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 12px; margin-top: 16px; max-height: 400px; overflow-y: auto; padding-right: 8px; }
+    .roster-poke { cursor: pointer; text-align: center; padding: 4px; border-radius: var(--radius-sm); transition: 0.2s; }
+    .roster-poke:hover { background: var(--surface-2); transform: translateY(-2px); }
+    .roster-poke img { width: 50px; height: 50px; image-rendering: pixelated; }
+    .roster-poke span { display: block; font-size: 0.6rem; color: var(--gold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    @media (max-width: 768px) {
+      .team-slot { width: 70px; height: 70px; }
+      .team-slot img { width: 40px; height: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo" style="gap: 12px;">
+        <img src="assets/logo.png" alt="GG Logo" style="height: 32px; border-radius: 50%; box-shadow: 0 0 10px rgba(212,160,23,0.5);">
+        GG <span>TOOLS</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Tier List</a></li>
+        <li><a href="speed-calc.html">Speed Tiers</a></li>
+        <li><a href="counters.html">Counters</a></li>
+        <li><a href="teambuilder.html" class="active">Team Builder</a></li>
+      </ul>
+      <div class="nav-social">
+        <a href="https://www.youtube.com/@gholdengonzaa" target="_blank" title="YouTube">🎬</a>
+        <a href="https://discord.gg/K52eDVeh" target="_blank" title="Discord">💬</a>
+        <a href="https://www.patreon.com/15868000/join" target="_blank" title="Patreon">⭐</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="padding-bottom: 80px;">
+    <div class="builder-header">
+      <h1>TEAM BUILDER</h1>
+      <p style="color: var(--text-muted);">Armá tu equipo de 6 y analizá automáticamente sus sinergias defensivas.</p>
+    </div>
+
+    <!-- Tu Equipo -->
+    <div class="team-section">
+      <h3 style="text-align: center; margin-bottom: 16px; color: var(--gold);">TU EQUIPO</h3>
+      <div class="team-slots" id="teamSlots">
+        <!-- Generados por JS -->
+      </div>
+      <div style="text-align: center;">
+        <button class="btn btn-outline" id="btnClearTeam">Vaciar Equipo</button>
+      </div>
+    </div>
+
+    <!-- Análisis Defensivo -->
+    <div class="analysis-section">
+      <h3 style="text-align: center; color: var(--gold); margin-bottom: 8px;">MATRIZ DEFENSIVA</h3>
+      <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+        Haz clic en el Pokémon para ver sus counters.<br>
+        <strong style="color:#EF4444;">W</strong> = Weakness (Debilidad) | <strong style="color:#F5D76E;">R</strong> = Resistance (Resistencia) | <strong style="color:#3B82F6;">I</strong> = Immunity (Inmunidad)
+      </p>
+      <div class="matrix-container">
+        <table class="matrix-table">
+          <thead>
+            <tr id="matrixHeader">
+              <!-- Generado por JS -->
+            </tr>
+          </thead>
+          <tbody id="matrixBody">
+            <!-- Generado por JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Roster Disponible -->
+    <div class="roster-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+        <h3 style="color: var(--gold);">ROSTER</h3>
+        <input type="text" id="rosterSearch" class="search-input" placeholder="🔍 Buscar Pokémon..." style="width: 250px;">
+      </div>
+      <div class="roster-grid" id="rosterGrid">
+        <!-- Generados por JS -->
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="about.html">Sobre Nosotros</a>
+      <a href="privacy.html">Privacidad</a>
+      <a href="terms.html">Términos</a>
+      <a href="https://www.youtube.com/@gholdengonzaa" target="_blank">YouTube</a>
+    </div>
+    <p>GholdenGonzaa Tools © 2026 · Pokémon Champions Competitivo en Español</p>
+    <p style="margin-top:8px; font-size:0.75rem; opacity:0.6;">Pokémon © Nintendo/Game Freak. Este sitio no está afiliado a The Pokémon Company.</p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/teambuilder.js?v=2"></script>
+</body>
+</html>

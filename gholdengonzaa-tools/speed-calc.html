@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speed Tiers Pokémon Champions | GholdenGonzaa</title>
+  <meta name="description" content="Calculadora de Speed Tiers para Pokémon Champions. Mirá quién ataca primero en el meta.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .speed-header { text-align: center; padding: 40px 20px; }
+    .speed-header h1 { font-family: var(--font-display); color: var(--gold); font-size: 3rem; letter-spacing: 2px; }
+    .speed-header p { color: var(--text-muted); margin-top: 10px; max-width: 600px; margin-left: auto; margin-right: auto; }
+    
+    .speed-controls { display: flex; gap: 16px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; }
+    .search-input { width: 300px; max-width: 100%; }
+    
+    .speed-table-container { overflow-x: auto; background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); }
+    .speed-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .speed-table th, .speed-table td { padding: 12px 16px; border-bottom: 1px solid var(--surface-3); }
+    .speed-table th { background: var(--surface-2); font-family: var(--font-display); color: var(--gold); position: sticky; top: 0; z-index: 10; }
+    .speed-table tr:hover { background: var(--surface-2); }
+    
+    .poke-cell { display: flex; align-items: center; gap: 12px; font-weight: bold; }
+    .poke-cell img { width: 40px; height: 40px; image-rendering: pixelated; }
+    
+    .stat-max { color: #10B981; font-weight: bold; }
+    .stat-neutral { color: #F59E0B; font-weight: bold; }
+    .stat-min { color: #EF4444; font-weight: bold; }
+    .stat-base { color: var(--text-muted); }
+    
+    .highlight-row { background: rgba(212, 160, 23, 0.1) !important; border-left: 4px solid var(--gold); }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo" style="gap: 12px;">
+        <img src="assets/logo.png" alt="GG Logo" style="height: 32px; border-radius: 50%; box-shadow: 0 0 10px rgba(212,160,23,0.5);">
+        GG <span>TOOLS</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Tier List</a></li>
+        <li><a href="speed-calc.html" class="active">Speed Tiers</a></li>
+        <li><a href="counters.html">Counters</a></li>
+        <li><a href="teambuilder.html">Team Builder</a></li>
+      </ul>
+      <div class="nav-social">
+        <a href="https://www.youtube.com/@gholdengonzaa" target="_blank" title="YouTube">🎬</a>
+        <a href="https://discord.gg/K52eDVeh" target="_blank" title="Discord">💬</a>
+        <a href="https://www.patreon.com/15868000/join" target="_blank" title="Patreon">⭐</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="padding-bottom: 80px;">
+    <div class="speed-header">
+      <h1>SPEED TIERS</h1>
+      <p>Todos los stats están calculados a <strong>Nivel 50</strong>. Usá el buscador para encontrar a tu Pokémon y ver a quién supera en velocidad.</p>
+    </div>
+
+    <div class="speed-controls">
+      <input type="text" id="speedSearch" class="search-input" placeholder="🔍 Buscar Pokémon...">
+      <button class="btn btn-outline speed-mod-btn" id="btnScarf" data-mod="scarf" title="Multiplica la velocidad x1.5">Choice Scarf</button>
+      <button class="btn btn-outline speed-mod-btn" id="btnTailwind" data-mod="tailwind" title="Multiplica la velocidad x2">Tailwind</button>
+      <button class="btn btn-outline" id="btnTrickRoom" title="Invierte el orden de velocidad">Espacio Raro</button>
+    </div>
+
+    <div class="speed-table-container">
+      <table class="speed-table">
+        <thead>
+          <tr>
+            <th>Pokémon</th>
+            <th title="Naturaleza Favorable (+), 252 EVs, 31 IVs">Máxima Vel. (+)</th>
+            <th title="Naturaleza Neutra, 252 EVs, 31 IVs">Neutra Vel.</th>
+            <th title="Naturaleza Desfavorable (-), 0 EVs, 0 IVs">Mínima Vel. (-)</th>
+            <th>Base</th>
+          </tr>
+        </thead>
+        <tbody id="speedTableBody">
+          <!-- JS fills this -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="about.html">Sobre Nosotros</a>
+      <a href="privacy.html">Privacidad</a>
+      <a href="terms.html">Términos</a>
+      <a href="https://www.youtube.com/@gholdengonzaa" target="_blank">YouTube</a>
+    </div>
+    <p>GholdenGonzaa Tools © 2026 · Pokémon Champions Competitivo en Español</p>
+    <p style="margin-top:8px; font-size:0.75rem; opacity:0.6;">Pokémon © Nintendo/Game Freak. Este sitio no está afiliado a The Pokémon Company.</p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/speedcalc.js"></script>
+</body>
+</html>

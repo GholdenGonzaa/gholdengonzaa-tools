@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Counters y Debilidades Pokémon Champions | GholdenGonzaa</title>
+  <meta name="description" content="Calculadora de counters, debilidades y resistencias para Pokémon Champions. Descubrí qué usar contra el meta actual.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .counter-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; margin-top: 24px; }
+    .search-section { background: var(--surface); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); }
+    .results-section { display: flex; flex-direction: column; gap: 20px; }
+    .type-box { background: var(--surface-2); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--surface-3); }
+    .type-box h3 { margin-bottom: 12px; font-family: var(--font-display); color: var(--gold); letter-spacing: 1px; }
+    .types-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .counter-sug { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .poke-result { text-align: center; margin-bottom: 24px; }
+    .poke-result img { width: 120px; height: 120px; margin: 0 auto; image-rendering: pixelated; }
+    .poke-result h2 { font-family: var(--font-display); font-size: 2.5rem; letter-spacing: 2px; }
+    .search-results { max-height: 300px; overflow-y: auto; margin-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+    .search-item { display: flex; align-items: center; gap: 12px; padding: 8px; background: var(--surface-2); border-radius: var(--radius-sm); cursor: pointer; transition: background 0.2s; }
+    .search-item:hover { background: var(--surface-3); }
+    .search-item img { width: 40px; height: 40px; }
+    .stat-multiplier { font-size: 0.8rem; font-weight: bold; background: var(--black); padding: 2px 6px; border-radius: 4px; margin-left: 4px; }
+    @media (max-width: 768px) { .counter-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo" style="gap: 12px;">
+        <img src="assets/logo.png" alt="GG Logo" style="height: 32px; border-radius: 50%; box-shadow: 0 0 10px rgba(212,160,23,0.5);">
+        GG <span>TOOLS</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Tier List</a></li>
+        <li><a href="speed-calc.html">Speed Tiers</a></li>
+        <li><a href="counters.html" class="active">Counters</a></li>
+        <li><a href="teambuilder.html">Team Builder</a></li>
+      </ul>
+      <div class="nav-social">
+        <a href="https://www.youtube.com/@gholdengonzaa" target="_blank" title="YouTube">🎬</a>
+        <a href="https://discord.gg/K52eDVeh" target="_blank" title="Discord">💬</a>
+        <a href="https://www.patreon.com/15868000/join" target="_blank" title="Patreon">⭐</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero" style="padding: 40px 20px;">
+    <h1>GUÍA DE COUNTERS</h1>
+    <p>Buscá un Pokémon para ver sus debilidades y qué usar para hacerle counter en el meta de Pokémon Champions.</p>
+  </section>
+
+  <main class="container" style="padding-bottom: 80px;">
+    <div class="counter-grid">
+      
+      <!-- Buscador -->
+      <div class="search-section">
+        <input type="text" class="search-input" id="searchPoke" placeholder="🔍 Buscar Pokémon..." style="width: 100%;">
+        <div class="search-results" id="searchResults"></div>
+      </div>
+
+      <!-- Resultados -->
+      <div class="results-section" id="resultsArea" style="display: none;">
+        <div class="poke-result" id="pokeInfo"></div>
+        
+        <div class="type-box">
+          <h3>💥 Débil contra (Toma más daño)</h3>
+          <div class="types-list" id="weaknessList"></div>
+          <h4 style="margin-top: 16px; color: var(--text-muted); font-size: 0.9rem;">Mejores Counters del Roster:</h4>
+          <div class="counter-sug" id="countersList"></div>
+        </div>
+
+        <div class="type-box">
+          <h3>🗡️ Fuerte contra (Hace más daño)</h3>
+          <h4 style="margin-bottom: 16px; color: var(--text-muted); font-size: 0.9rem; font-weight: normal;">Excelente respuesta ofensiva contra estos Pokémon:</h4>
+          <div class="counter-sug" id="strongAgainstList"></div>
+        </div>
+
+        <div class="type-box">
+          <h3>🛡️ Resistente contra (Toma menos daño)</h3>
+          <div class="types-list" id="resistList"></div>
+        </div>
+
+        <div class="type-box" id="immuneBox" style="display: none;">
+          <h3>🚫 Inmune a (No toma daño)</h3>
+          <div class="types-list" id="immuneList"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="about.html">Sobre Nosotros</a>
+      <a href="privacy.html">Privacidad</a>
+      <a href="terms.html">Términos</a>
+      <a href="https://www.youtube.com/@gholdengonzaa" target="_blank">YouTube</a>
+    </div>
+    <p>GholdenGonzaa Tools © 2026 · Pokémon Champions Competitivo en Español</p>
+    <p style="margin-top:8px; font-size:0.75rem; opacity:0.6;">Pokémon © Nintendo/Game Freak. Este sitio no está afiliado a The Pokémon Company.</p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/counters.js"></script>
+</body>
+</html>

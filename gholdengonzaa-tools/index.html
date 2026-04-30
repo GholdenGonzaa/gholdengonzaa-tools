@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tier List Pokémon Champions 2026 — Ranking Competitivo en Español | GholdenGonzaa</title>
+  <meta name="description" content="Tier List actualizada de Pokémon Champions en español. Ranking competitivo de los mejores Pokémon y Megas del meta actual. Herramientas gratuitas por GholdenGonzaa.">
+  <meta name="keywords" content="Pokemon Champions tier list, tier list español, Pokemon competitivo, mejores Pokemon Champions, mega evolutions ranking, GholdenGonzaa">
+  <meta property="og:title" content="GholdenGonzaa Tools — Tier List Pokémon Champions">
+  <meta property="og:description" content="Herramientas gratuitas de Pokémon Champions competitivo en español.">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo" style="gap: 12px;">
+        <img src="assets/logo.png" alt="GG Logo" style="height: 32px; border-radius: 50%; box-shadow: 0 0 10px rgba(212,160,23,0.5);">
+        GG <span>TOOLS</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Tier List</a></li>
+        <li><a href="speed-calc.html">Speed Tiers</a></li>
+        <li><a href="counters.html">Counters</a></li>
+        <li><a href="teambuilder.html">Team Builder</a></li>
+      </ul>
+      <div class="nav-social">
+        <a href="https://www.youtube.com/@gholdengonzaa" target="_blank" title="YouTube">🎬</a>
+        <a href="https://discord.gg/K52eDVeh" target="_blank" title="Discord">💬</a>
+        <a href="https://www.patreon.com/15868000/join" target="_blank" title="Patreon">⭐</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>TIER LIST — POKÉMON CHAMPIONS</h1>
+    <p>Arrastrá los Pokémon a las cajas para armar tu Tier List. <br><strong>Tip:</strong> Hacé doble clic o arrastrá un Pokémon fuera de la tabla para borrarlo.</p>
+    <div class="hero-badge"><span class="dot"></span> Regulación M-A · Actualizado Abril 2026</div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="container">
+
+    <!-- Filters -->
+    <div class="filters-bar" id="filters">
+      <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar Pokémon...">
+      <button class="filter-btn active" data-filter="all">Todos</button>
+      <button class="filter-btn" data-filter="mega">Mega</button>
+      <button class="filter-btn" data-filter="fire">🔥</button>
+      <button class="filter-btn" data-filter="water">💧</button>
+      <button class="filter-btn" data-filter="grass">🌿</button>
+      <button class="filter-btn" data-filter="electric">⚡</button>
+      <button class="filter-btn" data-filter="dragon">🐉</button>
+      <button class="filter-btn" data-filter="fairy">🧚</button>
+      <button class="filter-btn" data-filter="steel">⚙️</button>
+      <button class="filter-btn" data-filter="ghost">👻</button>
+      <button class="filter-btn" data-filter="fighting">🥊</button>
+      <button class="filter-btn" data-filter="dark">🌑</button>
+      <button class="filter-btn" data-filter="psychic">🔮</button>
+      <button class="filter-btn" data-filter="ground">🏔️</button>
+      <button class="filter-btn" data-filter="ice">❄️</button>
+      <button class="filter-btn" data-filter="rock">🪨</button>
+      <button class="filter-btn" data-filter="poison">☠️</button>
+      <button class="filter-btn" data-filter="bug">🐛</button>
+      <button class="filter-btn" data-filter="flying">🦅</button>
+      <button class="filter-btn" data-filter="normal">⬜</button>
+    </div>
+
+    <!-- Tier List -->
+    <h2 class="section-title">📊 Tier List</h2>
+    <div class="tier-container" id="tierContainer">
+      <div class="tier-row">
+        <div class="tier-label tier-s">S</div>
+        <div class="tier-pokemon" id="tier-s" data-tier="s"></div>
+      </div>
+      <div class="tier-row">
+        <div class="tier-label tier-a">A</div>
+        <div class="tier-pokemon" id="tier-a" data-tier="a"></div>
+      </div>
+      <div class="tier-row">
+        <div class="tier-label tier-b">B</div>
+        <div class="tier-pokemon" id="tier-b" data-tier="b"></div>
+      </div>
+      <div class="tier-row">
+        <div class="tier-label tier-c">C</div>
+        <div class="tier-pokemon" id="tier-c" data-tier="c"></div>
+      </div>
+      <div class="tier-row">
+        <div class="tier-label tier-d">D</div>
+        <div class="tier-pokemon" id="tier-d" data-tier="d"></div>
+      </div>
+    </div>
+
+    <!-- Export -->
+    <div style="display:flex; gap:12px; margin-bottom:40px; flex-wrap:wrap;">
+      <button class="btn btn-gold" id="btnReset">🔄 Resetear</button>
+      <button class="btn btn-outline" id="btnShare">📋 Copiar Link</button>
+    </div>
+
+    <!-- Untiered Pool -->
+    <div class="roster-pool-header">
+      <h2 class="section-title" style="margin-bottom:0;">🎮 Pokémon Disponibles</h2>
+      <span id="pokeCount" style="color:var(--text-muted); font-size:0.9rem;"></span>
+    </div>
+    <div class="roster-pool" id="rosterPool"></div>
+
+    <!-- SEO Content Section -->
+    <section class="docs-content" style="margin-top: 80px; text-align: left; background: var(--surface-2);">
+      <h2 style="color:var(--gold);">Guía Pokémon Champions: Dominando la Regulación M-A</h2>
+      <p>Bienvenido a la central de recursos de <strong>GholdenGonzaa Tools</strong>. Para tener éxito en el competitivo de Pokémon Champions, no basta con tener Pokémon fuertes; necesitás entender la sinergia de tipos y la gestión de velocidades.</p>
+      <h3 style="color:var(--gold-light); margin-top:20px;">¿Cómo usar la Tier List?</h3>
+      <p>Nuestra Tier List interactiva te permite organizar el meta según tu propio criterio. Los Pokémon en <strong>Tier S</strong> son aquellos que definen el formato, como Mega Charizard Y o Garchomp, debido a su versatilidad y potencia bruta. Al construir tu equipo, intentá siempre tener una respuesta para estos "titanes" del meta.</p>
+      <h3 style="color:var(--gold-light); margin-top:20px;">Sinergia y Construcción de Equipos</h3>
+      <p>Utilizá nuestro <strong>Team Builder</strong> para verificar que no tengas debilidades compartidas. Un error común es llevar tres Pokémon débiles al tipo Hada, lo que te deja vulnerable ante amenazas como Clefable o Sylveon. ¡Nuestra matriz defensiva te avisa antes de que entres al combate!</p>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="about.html">Sobre Nosotros</a>
+      <a href="privacy.html">Privacidad</a>
+      <a href="terms.html">Términos</a>
+      <a href="https://www.youtube.com/@gholdengonzaa" target="_blank">YouTube</a>
+    </div>
+    <p>GholdenGonzaa Tools © 2026 · Pokémon Champions Competitivo en Español</p>
+    <p style="margin-top:8px; font-size:0.75rem; opacity:0.6;">Pokémon © Nintendo/Game Freak. Este sitio no está afiliado a The Pokémon Company.</p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/tierlist.js"></script>
+</body>
+</html>
