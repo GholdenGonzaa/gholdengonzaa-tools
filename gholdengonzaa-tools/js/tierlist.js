@@ -50,24 +50,15 @@
     card.addEventListener('touchmove', onTouchMove, { passive: false });
     card.addEventListener('touchend', onTouchEnd);
 
-    // Click to add to first tier (Tier S) if in pool
+    // Quick Select Menu for better UX (especially mobile)
     card.addEventListener('click', (e) => {
-      // Don't trigger if it was a dblclick (handled below) or if we are dragging
-      if (card.parentElement === rosterPool) {
-        const tierS = document.getElementById('tier-s');
-        if (tierS) {
-          tierS.appendChild(card);
-          updateCount();
-          saveTiers();
-          // Scroll up to see it in the tier
-          window.scrollTo({ top: document.getElementById('tierContainer').offsetTop - 100, behavior: 'smooth' });
-        }
-      }
+      e.stopPropagation();
+      showTierSelector(card);
     });
 
-    // Double click to remove from tier list
+    // Double click to remove from tier list (legacy fallback)
     card.addEventListener('dblclick', (e) => {
-      e.stopPropagation(); // Prevent click event
+      e.stopPropagation();
       if (card.parentElement !== rosterPool) {
         rosterPool.appendChild(card);
         updateCount();
@@ -322,6 +313,66 @@
       prompt('Copiá este link:', url);
     });
   });
+
+  // === QUICK TIER SELECTOR (Mobile Friendly) ===
+  function showTierSelector(card) {
+    // Remove existing if any
+    const existing = document.getElementById('tierSelectorOverlay');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.id = 'tierSelectorOverlay';
+    overlay.style = `
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8); z-index: 10000;
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(4px);
+    `;
+
+    const menu = document.createElement('div');
+    menu.style = `
+      background: var(--surface); padding: 24px; border-radius: 16px;
+      border: 1px solid var(--gold); text-align: center; max-width: 300px;
+      box-shadow: 0 0 30px rgba(212,160,23,0.3);
+    `;
+
+    const displayName = card.dataset.name;
+    menu.innerHTML = `
+      <p style="margin-bottom: 16px; font-family: var(--font-display); font-size: 1.5rem; color: var(--gold);">MOVER A:</p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+        <button class="btn btn-gold" onclick="moveCard('${card.dataset.id}', 's')">TIER S</button>
+        <button class="btn btn-gold" onclick="moveCard('${card.dataset.id}', 'a')">TIER A</button>
+        <button class="btn btn-gold" onclick="moveCard('${card.dataset.id}', 'b')">TIER B</button>
+        <button class="btn btn-gold" onclick="moveCard('${card.dataset.id}', 'c')">TIER C</button>
+        <button class="btn btn-gold" onclick="moveCard('${card.dataset.id}', 'd')">TIER D</button>
+        <button class="btn btn-outline" onclick="moveCard('${card.dataset.id}', 'pool')">QUITAR</button>
+      </div>
+      <button class="btn btn-outline" style="width: 100%;" onclick="document.getElementById('tierSelectorOverlay').remove()">CANCELAR</button>
+    `;
+
+    overlay.appendChild(menu);
+    document.body.appendChild(overlay);
+
+    overlay.onclick = (e) => { if(e.target === overlay) overlay.remove(); };
+  }
+
+  // Global helper for the menu
+  window.moveCard = (id, target) => {
+    const card = document.querySelector(`.poke-card[data-id="${id}"]`);
+    const overlay = document.getElementById('tierSelectorOverlay');
+    if (!card) return;
+
+    if (target === 'pool') {
+      rosterPool.appendChild(card);
+    } else {
+      const zone = document.getElementById(`tier-${target}`);
+      if (zone) zone.appendChild(card);
+    }
+
+    if (overlay) overlay.remove();
+    updateCount();
+    saveTiers();
+  };
 
   // === Load from URL param ===
   function loadFromURL() {
