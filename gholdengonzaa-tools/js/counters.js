@@ -108,6 +108,7 @@
     // 1. Have a STAB advantage
     // 2. NOT be weak to the target's STABs
     // 3. Ideally be faster, or very resistant
+    const weakTypes = eff.weaknesses.map(w => w.type);
     const suggestedCounters = POKEMON_DATA.filter(p => {
       if (p.id === poke.id) return false;
       
