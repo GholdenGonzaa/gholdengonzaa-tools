@@ -240,46 +240,79 @@
   if (btnDownloadTeam) {
     btnDownloadTeam.addEventListener('click', async () => {
       if (team.length === 0) {
-        alert("Agrega al menos un Pokémon a tu equipo para descargar la imagen.");
+        alert("Agrega al menos un Pokémon a tu equipo para descargar la ficha.");
         return;
       }
 
-      const captureArea = document.getElementById('captureArea');
-      const captureHeader = document.getElementById('captureHeader');
-      const buttonsToHide = document.querySelectorAll('.remove-btn, .mega-btn');
-      
-      // Prepare for capture
+      // Preparar Ficha de Compartir
       btnDownloadTeam.disabled = true;
-      btnDownloadTeam.textContent = "⌛ Procesando...";
+      btnDownloadTeam.textContent = "⌛ Generando Ficha...";
       
-      captureHeader.style.display = 'flex';
-      buttonsToHide.forEach(b => b.style.opacity = '0');
+      const sharePokes = document.getElementById('sharePokes');
+      const shareStrengths = document.getElementById('shareStrengths');
+      const shareWeaknesses = document.getElementById('shareWeaknesses');
+      
+      // 1. Llenar Pokémon
+      sharePokes.innerHTML = '';
+      for (let i = 0; i < 6; i++) {
+        if (team[i]) {
+          sharePokes.innerHTML += `
+            <div class="share-poke-item">
+              <img src="${spriteUrl(team[i].id)}" alt="${team[i].name}">
+              <div style="font-size: 0.7rem; color: var(--gold); margin-top: 5px;">${team[i].displayName || team[i].name}</div>
+            </div>
+          `;
+        } else {
+          sharePokes.innerHTML += `<div class="share-poke-item" style="opacity: 0.3;"><div style="height: 80px;">?</div></div>`;
+        }
+      }
+
+      // 2. Calcular Resumen (Fortalezas y Debilidades)
+      const stats = {};
+      ALL_TYPES.forEach(type => stats[type] = { weak: 0, res: 0 });
+      
+      team.forEach(poke => {
+        ALL_TYPES.forEach(atkType => {
+          const mult = getMultiplier(poke.types, atkType);
+          if (mult > 1) stats[atkType].weak++;
+          if (mult < 1) stats[atkType].res++;
+        });
+      });
+
+      let strengthsHtml = '';
+      let weaknessesHtml = '';
+      
+      ALL_TYPES.forEach(type => {
+        if (stats[type].res >= 3) {
+          strengthsHtml += `<span class="summary-tag">${type.toUpperCase()} (${stats[type].res})</span>`;
+        }
+        if (stats[type].weak >= 3) {
+          weaknessesHtml += `<span class="summary-tag" style="border-left-color: #EF4444;">${type.toUpperCase()} (${stats[type].weak})</span>`;
+        }
+      });
+
+      shareStrengths.innerHTML = strengthsHtml || '<span style="opacity:0.5; font-size:0.8rem;">Ninguna destacada</span>';
+      shareWeaknesses.innerHTML = weaknessesHtml || '<span style="opacity:0.5; font-size:0.8rem;">Equipo balanceado</span>';
+
+      // 3. Capturar
+      const shareCard = document.getElementById('shareCard');
       
       try {
-        const canvas = await html2canvas(captureArea, {
-          backgroundColor: '#0f172a', // var(--background) fallback
-          scale: 2, // Higher quality
+        const canvas = await html2canvas(shareCard, {
+          backgroundColor: '#0f172a',
+          scale: 2,
           useCORS: true,
-          logging: false,
-          allowTaint: true,
-          onclone: (clonedDoc) => {
-            // Optional: further tweaks to the clone before capture
-            const clonedHeader = clonedDoc.getElementById('captureHeader');
-            if (clonedHeader) clonedHeader.style.display = 'flex';
-          }
+          logging: false
         });
         
         const link = document.createElement('a');
-        link.download = `mi-equipo-gholdengonzaa.png`;
+        link.download = `ficha-equipo-gg.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
       } catch (err) {
-        console.error("Error capturando imagen:", err);
-        alert("Hubo un error al generar la imagen. Intenta de nuevo.");
+        console.error("Error:", err);
+        alert("Error al generar la imagen.");
       } finally {
-        // Restore UI
-        captureHeader.style.display = 'none';
-        buttonsToHide.forEach(b => b.style.opacity = '1');
         btnDownloadTeam.disabled = false;
         btnDownloadTeam.innerHTML = '📸 Descargar Imagen';
       }
