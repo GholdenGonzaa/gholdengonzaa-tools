@@ -9,13 +9,7 @@ const SPRITE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sp
 
 // Helper to get sprite URL. For regional/alternate forms we use the standard sprite.
 function spriteUrl(id) {
-  const poke = POKEMON_DATA.find(p => p.id === id);
-  if (poke && poke.isMegaVariant) {
-    // Showdown names for megas don't have hyphens: scizor-mega -> scizormega
-    let showdownName = poke.name.replace(/-/g, '');
-    if (showdownName === 'greninjamega') showdownName = 'greninjaash';
-    return `https://play.pokemonshowdown.com/sprites/gen5/${showdownName}.png`;
-  }
+  // Usamos PokeAPI para TODOS, incluyendo Megas (IDs 10000+)
   return `${SPRITE_BASE}${id}.png`;
 }
 
