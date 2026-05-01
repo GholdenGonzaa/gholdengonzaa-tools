@@ -11,9 +11,9 @@ const SPRITE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sp
 function spriteUrl(id) {
   const poke = POKEMON_DATA.find(p => p.id === id);
   if (poke && poke.isMegaVariant) {
-    let showdownName = poke.name.replace('-mega-x', '-megax').replace('-mega-y', '-megay');
-    if (showdownName === 'greninja-mega') showdownName = 'greninja-ash';
-    // Some custom megas might not exist in showdown, but it's the safest fallback.
+    // Showdown names for megas don't have hyphens: scizor-mega -> scizormega
+    let showdownName = poke.name.replace(/-/g, '');
+    if (showdownName === 'greninjamega') showdownName = 'greninjaash';
     return `https://play.pokemonshowdown.com/sprites/gen5/${showdownName}.png`;
   }
   return `${SPRITE_BASE}${id}.png`;

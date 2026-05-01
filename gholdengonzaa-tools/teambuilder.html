@@ -60,20 +60,21 @@
     /* Estilos para la Ficha de Compartir */
     #shareCard {
       position: absolute;
-      left: -9999px; /* Fuera de pantalla */
-      width: 800px;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      padding: 40px;
-      border: 2px solid var(--gold);
-      border-radius: 24px;
+      left: -9999px;
+      width: 700px; /* Un poco más angosta para que se vea mejor en móviles */
+      background: #0f172a;
+      padding: 30px;
+      border: 1px solid var(--gold);
+      border-radius: 16px;
       color: white;
       font-family: var(--font-main);
     }
-    .share-header { display: flex; align-items: center; gap: 20px; border-bottom: 2px solid rgba(212,160,23,0.3); padding-bottom: 20px; margin-bottom: 30px; }
-    .share-pokes { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 30px; }
-    .share-poke-item { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 15px; width: 110px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
-    .share-poke-item img { width: 80px; height: 80px; image-rendering: pixelated; }
-    .share-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 16px; }
+    .share-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(212,160,23,0.2); padding-bottom: 15px; margin-bottom: 25px; }
+    .share-header img { height: 40px; width: 40px; border-radius: 50%; object-fit: cover; border: 1px solid var(--gold); }
+    .share-pokes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+    .share-poke-item { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+    .share-poke-item img { width: 90px; height: 90px; image-rendering: pixelated; object-fit: contain; }
+    .share-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; }
     .summary-box h4 { color: var(--gold); margin-bottom: 10px; font-family: var(--font-display); font-size: 1.2rem; }
     .summary-list { display: flex; flex-wrap: wrap; gap: 8px; }
     .summary-tag { background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; border-left: 3px solid var(--gold); }
@@ -172,11 +173,11 @@
     <!-- Ficha Invisible para Captura -->
     <div id="shareCard">
       <div class="share-header">
-        <img src="assets/logo.png" alt="Logo">
-        <div>
-          <h2 style="color: var(--gold); margin: 0; font-family: var(--font-display); font-size: 2rem;">GHOLDENGONZAA TOOLS</h2>
-          <p style="color: var(--text-muted); margin: 0; font-size: 0.9rem;">Analizador de Equipos · gholdengonzaa.xyz</p>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <img src="assets/logo.png" alt="Logo">
+          <h2 style="color: var(--gold); margin: 0; font-family: var(--font-display); font-size: 1.4rem; letter-spacing: 1px;">GHOLDENGONZAA TOOLS</h2>
         </div>
+        <div style="color: var(--text-muted); font-size: 0.8rem; font-weight: bold;">gholdengonzaa.xyz</div>
       </div>
       
       <div class="share-pokes" id="sharePokes">
