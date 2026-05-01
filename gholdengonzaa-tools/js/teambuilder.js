@@ -294,16 +294,24 @@
       shareStrengths.innerHTML = strengthsHtml || '<span style="opacity:0.5; font-size:0.8rem;">Ninguna destacada</span>';
       shareWeaknesses.innerHTML = weaknessesHtml || '<span style="opacity:0.5; font-size:0.8rem;">Equipo balanceado</span>';
 
-      // 3. Capturar
+      // 3. Capturar con Tiempo de Espera (Timeout)
       const shareCard = document.getElementById('shareCard');
       
+      const capturePromise = html2canvas(shareCard, {
+        backgroundColor: '#0f172a',
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        allowTaint: true
+      });
+
+      // Si tarda más de 8 segundos, cancelamos para no trabar la web
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("Timeout")), 8000)
+      );
+
       try {
-        const canvas = await html2canvas(shareCard, {
-          backgroundColor: '#0f172a',
-          scale: 2,
-          useCORS: true,
-          logging: false
-        });
+        const canvas = await Promise.race([capturePromise, timeoutPromise]);
         
         const link = document.createElement('a');
         link.download = `ficha-equipo-gg.png`;
@@ -311,7 +319,11 @@
         link.click();
       } catch (err) {
         console.error("Error:", err);
-        alert("Error al generar la imagen.");
+        if (err.message === "Timeout") {
+          alert("La generación tardó demasiado. Probablemente una imagen no cargó. Intentá de nuevo.");
+        } else {
+          alert("Error al generar la imagen. Verificá tu conexión.");
+        }
       } finally {
         btnDownloadTeam.disabled = false;
         btnDownloadTeam.innerHTML = '📸 Descargar Imagen';

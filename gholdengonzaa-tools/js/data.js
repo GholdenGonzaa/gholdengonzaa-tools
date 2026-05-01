@@ -2036,19 +2036,6 @@ const POKEMON_DATA = [
       "normal",
       "dragon"
     ],
-    mega: true,
-    speed: 36,
-    hasMega: true
-  },
-  {
-    id: 10302,
-    name: "drampa-mega",
-    displayName: "Mega Drampa",
-    types: [
-      "normal",
-      "dragon"
-    ],
-    isMegaVariant: true,
     speed: 36
   },
   {
@@ -2136,9 +2123,7 @@ const POKEMON_DATA = [
     types: [
       "fairy"
     ],
-    mega: true,
-    speed: 64,
-    hasMega: true
+    speed: 64
   },
   {
     id: 877,
@@ -2147,9 +2132,7 @@ const POKEMON_DATA = [
       "electric",
       "dark"
     ],
-    mega: true,
-    speed: 97,
-    hasMega: true
+    speed: 97
   },
   {
     id: 887,
@@ -2229,9 +2212,7 @@ const POKEMON_DATA = [
     types: [
       "normal"
     ],
-    mega: true,
-    speed: 111,
-    hasMega: true
+    speed: 111
   },
   {
     id: 934,
@@ -2274,19 +2255,6 @@ const POKEMON_DATA = [
       "grass",
       "fire"
     ],
-    mega: true,
-    speed: 75,
-    hasMega: true
-  },
-  {
-    id: 10320,
-    name: "scovillain-mega",
-    displayName: "Mega Scovillain",
-    types: [
-      "grass",
-      "fire"
-    ],
-    isMegaVariant: true,
     speed: 75
   },
   {
@@ -2312,9 +2280,7 @@ const POKEMON_DATA = [
     types: [
       "water"
     ],
-    mega: true,
-    speed: 100,
-    hasMega: true
+    speed: 100
   },
   {
     id: 968,
@@ -2331,20 +2297,7 @@ const POKEMON_DATA = [
       "rock",
       "poison"
     ],
-    mega: true,
-    speed: 86,
-    hasMega: true
-  },
-  {
-    id: 10321,
-    name: "glimmora-mega",
-    displayName: "Mega Glimmora",
-    types: [
-      "rock",
-      "poison"
-    ],
-    isMegaVariant: true,
-    speed: 101
+    speed: 86
   },
   {
     id: 981,
