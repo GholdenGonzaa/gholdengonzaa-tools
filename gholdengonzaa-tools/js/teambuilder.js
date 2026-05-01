@@ -259,11 +259,11 @@
           sharePokes.innerHTML += `
             <div class="share-poke-item">
               <img src="${spriteUrl(team[i].id)}" alt="${team[i].name}">
-              <div style="font-size: 0.7rem; color: var(--gold); margin-top: 5px;">${team[i].displayName || team[i].name}</div>
+              <div class="share-poke-name">${team[i].displayName || team[i].name}</div>
             </div>
           `;
         } else {
-          sharePokes.innerHTML += `<div class="share-poke-item" style="opacity: 0.3;"><div style="height: 80px;">?</div></div>`;
+          sharePokes.innerHTML += `<div class="share-poke-item" style="opacity: 0.3;"><div style="height: 120px; display: flex; align-items:center; justify-content:center; font-size: 2rem; color: var(--text-muted);">?</div></div>`;
         }
       }
 
