@@ -94,15 +94,15 @@
       display: flex;
       align-items: center;
       line-height: 1;
+      gap: 12px;
     }
-    .summary-box h4::before {
-      content: "";
+    .title-bar {
       display: inline-block;
       width: 4px;
-      height: 1.2rem;
+      height: 18px;
       background: var(--gold);
-      margin-right: 12px;
       border-radius: 2px;
+      flex-shrink: 0;
     }
     .summary-list { display: flex; flex-wrap: wrap; gap: 12px; }
     .summary-tag { 
@@ -213,11 +213,11 @@
     <!-- Ficha Invisible para Captura -->
     <div id="shareCard">
       <div class="share-header">
-        <div style="display: flex; align-items: center; gap: 15px;">
-          <img src="assets/logo.png" alt="Logo" style="height: 45px; width: 45px;">
-          <h2 style="color: var(--gold); margin: 0; font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 1px; line-height: 45px;">GHOLDENGONZAA TOOLS</h2>
+        <div style="display: flex; align-items: center; gap: 15px; height: 50px;">
+          <img src="assets/logo.png" alt="Logo" style="height: 45px; width: 45px; display: block;">
+          <h2 style="color: var(--gold); margin: 0; font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 1px; display: flex; align-items: center; height: 45px; padding-top: 2px;">GHOLDENGONZAA TOOLS</h2>
         </div>
-        <div style="color: var(--text-muted); font-size: 0.9rem; font-weight: bold; height: 45px; line-height: 45px;">gholdengonzaa.xyz</div>
+        <div style="color: var(--text-muted); font-size: 0.9rem; font-weight: bold; display: flex; align-items: center; height: 45px;">gholdengonzaa.xyz</div>
       </div>
       
       <div class="share-pokes" id="sharePokes">
@@ -226,11 +226,11 @@
 
       <div class="share-summary">
         <div class="summary-box">
-          <h4>FORTALEZAS</h4>
+          <h4><span class="title-bar"></span>FORTALEZAS</h4>
           <div class="summary-list" id="shareStrengths"></div>
         </div>
         <div class="summary-box">
-          <h4>DEBILIDADES</h4>
+          <h4><span class="title-bar"></span>DEBILIDADES</h4>
           <div class="summary-list" id="shareWeaknesses"></div>
         </div>
       </div>
@@ -268,6 +268,6 @@
 
   <script src="js/data.js"></script>
   <script src="js/common.js"></script>
-  <script src="js/teambuilder.js?v=2"></script>
+  <script src="js/teambuilder.js?v=3"></script>
 </body>
 </html>
