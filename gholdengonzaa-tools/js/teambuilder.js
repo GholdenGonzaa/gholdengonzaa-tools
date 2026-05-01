@@ -32,6 +32,7 @@
   const rosterGrid = document.getElementById('rosterGrid');
   const rosterSearch = document.getElementById('rosterSearch');
   const btnClearTeam = document.getElementById('btnClearTeam');
+  const btnDownloadTeam = document.getElementById('btnDownloadTeam');
 
   let team = []; // Max 6
 
@@ -235,6 +236,55 @@
     team = [];
     renderTeam();
   });
+
+  if (btnDownloadTeam) {
+    btnDownloadTeam.addEventListener('click', async () => {
+      if (team.length === 0) {
+        alert("Agrega al menos un Pokémon a tu equipo para descargar la imagen.");
+        return;
+      }
+
+      const captureArea = document.getElementById('captureArea');
+      const captureHeader = document.getElementById('captureHeader');
+      const buttonsToHide = document.querySelectorAll('.remove-btn, .mega-btn');
+      
+      // Prepare for capture
+      btnDownloadTeam.disabled = true;
+      btnDownloadTeam.textContent = "⌛ Procesando...";
+      
+      captureHeader.style.display = 'flex';
+      buttonsToHide.forEach(b => b.style.opacity = '0');
+      
+      try {
+        const canvas = await html2canvas(captureArea, {
+          backgroundColor: '#0f172a', // var(--background) fallback
+          scale: 2, // Higher quality
+          useCORS: true,
+          logging: false,
+          allowTaint: true,
+          onclone: (clonedDoc) => {
+            // Optional: further tweaks to the clone before capture
+            const clonedHeader = clonedDoc.getElementById('captureHeader');
+            if (clonedHeader) clonedHeader.style.display = 'flex';
+          }
+        });
+        
+        const link = document.createElement('a');
+        link.download = `mi-equipo-gholdengonzaa.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch (err) {
+        console.error("Error capturando imagen:", err);
+        alert("Hubo un error al generar la imagen. Intenta de nuevo.");
+      } finally {
+        // Restore UI
+        captureHeader.style.display = 'none';
+        buttonsToHide.forEach(b => b.style.opacity = '1');
+        btnDownloadTeam.disabled = false;
+        btnDownloadTeam.innerHTML = '📸 Descargar Imagen';
+      }
+    });
+  }
 
   // Initial renders
   renderTeam();

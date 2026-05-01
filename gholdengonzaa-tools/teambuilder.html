@@ -11,13 +11,32 @@
     .builder-header h1 { font-family: var(--font-display); color: var(--gold); font-size: 3rem; letter-spacing: 2px; }
     
     .team-section { background: var(--surface); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 24px; }
-    .team-slots { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px; }
+    .team-slots { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; padding: 10px; }
     .team-slot { width: 100px; height: 100px; border: 2px dashed var(--surface-3); border-radius: var(--radius-sm); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; cursor: pointer; transition: 0.2s; background: var(--surface-2); }
     .team-slot:hover { border-color: var(--gold); }
     .team-slot img { width: 60px; height: 60px; image-rendering: pixelated; }
-    .team-slot .remove-btn { position: absolute; top: 4px; right: 4px; background: var(--error); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; cursor: pointer; display: none; }
+    .team-slot .remove-btn { position: absolute; top: -8px; right: -8px; background: var(--error); color: white; border: 2px solid var(--surface); border-radius: 50%; width: 28px; height: 28px; font-size: 14px; cursor: pointer; display: none; z-index: 20; box-shadow: 0 2px 4px rgba(0,0,0,0.3); line-height: 1; }
     .team-slot.filled .remove-btn { display: block; }
     .team-slot.filled { border-style: solid; border-color: var(--surface-3); }
+
+    .mega-btn {
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      border-radius: 12px;
+      padding: 2px 8px;
+      font-size: 0.65rem;
+      font-weight: bold;
+      cursor: pointer;
+      white-space: nowrap;
+      z-index: 10;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .team-slot.mega-active { border-color: var(--gold); box-shadow: 0 0 15px rgba(212,160,23,0.4); }
 
     .analysis-section { background: var(--surface); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 24px; }
     .matrix-container { overflow-x: auto; margin-top: 16px; border-radius: var(--radius-sm); border: 1px solid var(--surface-3); }
@@ -51,6 +70,7 @@
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9476094296112630"
      crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -80,36 +100,52 @@
       <p style="color: var(--text-muted);">Armá tu equipo de 6 y analizá automáticamente sus sinergias defensivas.</p>
     </div>
 
-    <!-- Tu Equipo -->
-    <div class="team-section">
-      <h3 style="text-align: center; margin-bottom: 16px; color: var(--gold);">TU EQUIPO</h3>
-      <div class="team-slots" id="teamSlots">
-        <!-- Generados por JS -->
+    <!-- Área de Captura -->
+    <div id="captureArea" style="background: var(--background); padding: 10px; border-radius: var(--radius);">
+      
+      <!-- Logo para la captura (oculto en web, visible en captura) -->
+      <div id="captureHeader" style="display: none; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px; padding: 10px; border-bottom: 1px solid var(--gold);">
+        <img src="assets/logo.png" style="height: 50px; border-radius: 50%;">
+        <div style="text-align: left;">
+          <h2 style="color: var(--gold); margin: 0; font-family: var(--font-display);">GHOLDENGONZAA TOOLS</h2>
+          <p style="color: var(--text-muted); margin: 0; font-size: 0.8rem;">gholdengonzaa.xyz</p>
+        </div>
       </div>
-      <div style="text-align: center;">
-        <button class="btn btn-outline" id="btnClearTeam">Vaciar Equipo</button>
+
+      <!-- Tu Equipo -->
+      <div class="team-section" style="margin-bottom: 10px;">
+        <h3 style="text-align: center; margin-bottom: 16px; color: var(--gold);">TU EQUIPO</h3>
+        <div class="team-slots" id="teamSlots">
+          <!-- Generados por JS -->
+        </div>
+      </div>
+
+      <!-- Análisis Defensivo -->
+      <div class="analysis-section">
+        <h3 style="text-align: center; color: var(--gold); margin-bottom: 8px;">MATRIZ DEFENSIVA</h3>
+        <p id="matrixLegend" style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+          Haz clic en el Pokémon para ver sus counters.<br>
+          <strong style="color:#EF4444;">W</strong> = Weakness | <strong style="color:#F5D76E;">R</strong> = Resistance | <strong style="color:#3B82F6;">I</strong> = Immunity
+        </p>
+        <div class="matrix-container" style="max-height: none !important; overflow: visible !important;">
+          <table class="matrix-table" id="captureMatrix">
+            <thead>
+              <tr id="matrixHeader">
+                <!-- Generado por JS -->
+              </tr>
+            </thead>
+            <tbody id="matrixBody">
+              <!-- Generado por JS -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-    <!-- Análisis Defensivo -->
-    <div class="analysis-section">
-      <h3 style="text-align: center; color: var(--gold); margin-bottom: 8px;">MATRIZ DEFENSIVA</h3>
-      <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
-        Haz clic en el Pokémon para ver sus counters.<br>
-        <strong style="color:#EF4444;">W</strong> = Weakness (Debilidad) | <strong style="color:#F5D76E;">R</strong> = Resistance (Resistencia) | <strong style="color:#3B82F6;">I</strong> = Immunity (Inmunidad)
-      </p>
-      <div class="matrix-container">
-        <table class="matrix-table">
-          <thead>
-            <tr id="matrixHeader">
-              <!-- Generado por JS -->
-            </tr>
-          </thead>
-          <tbody id="matrixBody">
-            <!-- Generado por JS -->
-          </tbody>
-        </table>
-      </div>
+    <!-- Botones de Acción -->
+    <div style="display: flex; justify-content: center; gap: 12px; margin-top: -12px; margin-bottom: 24px;">
+      <button class="btn btn-outline" id="btnClearTeam">Vaciar Equipo</button>
+      <button class="btn btn-gold" id="btnDownloadTeam" style="display: flex; align-items: center; gap: 8px;">📸 Descargar Imagen</button>
     </div>
 
     <!-- Roster Disponible -->
