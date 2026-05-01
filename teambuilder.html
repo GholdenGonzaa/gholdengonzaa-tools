@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Builder Pokémon Champions | GholdenGonzaa</title>
+  <meta name="description" content="Constructor de equipos competitivo para Pokémon Champions. Analizá debilidades y resistencias.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .builder-header { text-align: center; padding: 40px 20px 20px; }
+    .builder-header h1 { font-family: var(--font-display); color: var(--gold); font-size: 3rem; letter-spacing: 2px; }
+    
+    .team-section { background: var(--surface); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 24px; }
+    .team-slots { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; padding: 10px; }
+    .team-slot { width: 100px; height: 100px; border: 2px dashed var(--surface-3); border-radius: var(--radius-sm); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; cursor: pointer; transition: 0.2s; background: var(--surface-2); }
+    .team-slot:hover { border-color: var(--gold); }
+    .team-slot img { width: 60px; height: 60px; image-rendering: pixelated; }
+    .team-slot .remove-btn { 
+      position: absolute !important; 
+      top: -12px !important; 
+      right: -12px !important; 
+      bottom: auto !important; /* Reset bottom */
+      left: auto !important;   /* Reset left */
+      background: var(--error) !important; 
+      color: white !important; 
+      border: 2px solid var(--surface) !important; 
+      border-radius: 50% !important; 
+      width: 32px !important; 
+      height: 32px !important; 
+      font-size: 16px !important; 
+      cursor: pointer !important; 
+      z-index: 100 !important; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    }
+    .team-slot.filled .remove-btn { display: flex; }
+
+    .mega-btn {
+      position: absolute !important;
+      bottom: -15px !important; 
+      top: auto !important;    /* Reset top */
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      background: var(--gold) !important;
+      color: var(--black) !important;
+      border: 2px solid var(--surface) !important;
+      border-radius: 12px !important;
+      padding: 4px 12px !important;
+      font-size: 0.75rem !important;
+      font-weight: bold !important;
+      cursor: pointer !important;
+      white-space: nowrap !important;
+      z-index: 110 !important;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
+    }
+    .team-slot.mega-active { border-color: var(--gold) !important; box-shadow: 0 0 15px rgba(212,160,23,0.5) !important; }
+
+    /* Estilos para la Ficha de Compartir */
+    #shareCard {
+      position: absolute;
+      left: -9999px;
+      width: 700px; /* Un poco más angosta para que se vea mejor en móviles */
+      background: #0f172a;
+      padding: 30px;
+      border: 1px solid var(--gold);
+      border-radius: 16px;
+      color: white;
+      font-family: var(--font-main);
+    }
+    .share-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(212,160,23,0.2); padding-bottom: 15px; margin-bottom: 25px; }
+    .share-header img { height: 40px; width: 40px; border-radius: 50%; object-fit: cover; border: 1px solid var(--gold); }
+    .share-pokes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+    .share-poke-item { 
+      background: rgba(255,255,255,0.03); 
+      border-radius: 12px; 
+      padding: 15px; 
+      border: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .share-poke-item img { width: 110px; height: 110px; image-rendering: pixelated; object-fit: contain; }
+    .share-summary { display: flex; flex-direction: column; gap: 20px; background: rgba(0,0,0,0.3); padding: 25px; border-radius: 12px; border: 1px solid rgba(212,160,23,0.1); }
+    .summary-box { width: 100%; }
+    .summary-box h4 { 
+      color: var(--gold); 
+      margin-bottom: 18px; 
+      font-family: var(--font-display); 
+      font-size: 1.2rem; 
+      display: flex;
+      align-items: center;
+      line-height: 1;
+    }
+    .summary-box h4::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 1.2rem;
+      background: var(--gold);
+      margin-right: 12px;
+      border-radius: 2px;
+    }
+    .summary-list { display: flex; flex-wrap: wrap; gap: 12px; }
+    .summary-tag { 
+      background: rgba(255,255,255,0.08); 
+      padding: 0 15px; 
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px; 
+      font-size: 0.9rem; 
+      font-weight: bold; 
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
+    }
+
+    .analysis-section { background: var(--surface); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 24px; }
+    .matrix-container { overflow-x: auto; margin-top: 16px; border-radius: var(--radius-sm); border: 1px solid var(--surface-3); }
+    .matrix-table { width: 100%; border-collapse: collapse; text-align: center; background: var(--surface-2); font-size: 0.85rem; }
+    .matrix-table th, .matrix-table td { padding: 6px; border: 1px solid var(--surface-3); min-width: 40px; }
+    .matrix-table th { background: var(--surface-3); color: var(--gold); font-family: var(--font-display); letter-spacing: 1px; font-weight: normal; font-size: 1.1rem; position: sticky; top: 0; z-index: 2; }
+    .matrix-table th:first-child { position: sticky; left: 0; z-index: 3; background: var(--surface-3); text-align: left; padding-left: 12px; min-width: 100px; }
+    .matrix-table td:first-child { position: sticky; left: 0; background: var(--surface-2); z-index: 1; text-align: left; padding-left: 12px; border-right: 2px solid var(--surface-3); }
+    .matrix-table .col-total { font-weight: bold; background: rgba(0,0,0,0.2); border-left: 2px solid var(--surface-3); }
+    
+    .cell-x4 { background: #7f1d1d !important; color: white; font-weight: bold; }
+    .cell-x2 { background: #b91c1c !important; color: white; }
+    .cell-x1 { color: var(--text-muted); }
+    .cell-x05 { background: #15803d !important; color: white; }
+    .cell-x025 { background: #14532d !important; color: white; font-weight: bold; }
+    .cell-x0 { background: #1e3a8a !important; color: white; font-weight: bold; }
+    
+    .team-header-img { width: 32px; height: 32px; margin: 0 auto; image-rendering: pixelated; display: block; }
+
+    .roster-section { background: var(--surface); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); }
+    .roster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 12px; margin-top: 16px; max-height: 400px; overflow-y: auto; padding-right: 8px; }
+    .roster-poke { cursor: pointer; text-align: center; padding: 4px; border-radius: var(--radius-sm); transition: 0.2s; }
+    .roster-poke:hover { background: var(--surface-2); transform: translateY(-2px); }
+    .roster-poke img { width: 50px; height: 50px; image-rendering: pixelated; }
+    .roster-poke span { display: block; font-size: 0.6rem; color: var(--gold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    @media (max-width: 768px) {
+      .team-slot { width: 70px; height: 70px; }
+      .team-slot img { width: 40px; height: 40px; }
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9476094296112630"
+     crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo" style="gap: 12px;">
+        <img src="assets/logo.png" alt="GG Logo" style="height: 32px; border-radius: 50%; box-shadow: 0 0 10px rgba(212,160,23,0.5);">
+        GG <span>TOOLS</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Tier List</a></li>
+        <li><a href="speed-calc.html">Speed Tiers</a></li>
+        <li><a href="counters.html">Counters</a></li>
+        <li><a href="teambuilder.html" class="active">Team Builder</a></li>
+      </ul>
+      <div class="nav-social">
+        <a href="https://www.youtube.com/@gholdengonzaa" target="_blank" title="YouTube">🎬</a>
+        <a href="https://discord.gg/K52eDVeh" target="_blank" title="Discord">💬</a>
+        <a href="https://www.patreon.com/15868000/join" target="_blank" title="Patreon">⭐</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="padding-bottom: 80px;">
+    <div class="builder-header">
+      <h1>TEAM BUILDER</h1>
+      <p style="color: var(--text-muted);">Armá tu equipo de 6 y analizá automáticamente sus sinergias defensivas.</p>
+    </div>
+
+    <!-- Área del Constructor -->
+    <div class="team-section">
+      <h3 style="text-align: center; margin-bottom: 16px; color: var(--gold);">TU EQUIPO</h3>
+      <div class="team-slots" id="teamSlots">
+        <!-- Generados por JS -->
+      </div>
+    </div>
+
+    <!-- Análisis Defensivo -->
+    <div class="analysis-section">
+      <h3 style="text-align: center; color: var(--gold); margin-bottom: 8px;">MATRIZ DEFENSIVA</h3>
+      <p id="matrixLegend" style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+        Haz clic en el Pokémon para ver sus counters.<br>
+        <strong style="color:#EF4444;">W</strong> = Weakness | <strong style="color:#F5D76E;">R</strong> = Resistance | <strong style="color:#3B82F6;">I</strong> = Immunity
+      </p>
+      <div class="matrix-container">
+        <table class="matrix-table">
+          <thead>
+            <tr id="matrixHeader">
+              <!-- Generado por JS -->
+            </tr>
+          </thead>
+          <tbody id="matrixBody">
+            <!-- Generado por JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Ficha Invisible para Captura -->
+    <div id="shareCard">
+      <div class="share-header">
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <img src="assets/logo.png" alt="Logo" style="height: 45px; width: 45px;">
+          <h2 style="color: var(--gold); margin: 0; font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 1px; line-height: 45px;">GHOLDENGONZAA TOOLS</h2>
+        </div>
+        <div style="color: var(--text-muted); font-size: 0.9rem; font-weight: bold; height: 45px; line-height: 45px;">gholdengonzaa.xyz</div>
+      </div>
+      
+      <div class="share-pokes" id="sharePokes">
+        <!-- Se llena por JS -->
+      </div>
+
+      <div class="share-summary">
+        <div class="summary-box">
+          <h4>FORTALEZAS</h4>
+          <div class="summary-list" id="shareStrengths"></div>
+        </div>
+        <div class="summary-box">
+          <h4>DEBILIDADES</h4>
+          <div class="summary-list" id="shareWeaknesses"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div style="display: flex; justify-content: center; gap: 12px; margin-top: -12px; margin-bottom: 24px;">
+      <button class="btn btn-outline" id="btnClearTeam">Vaciar Equipo</button>
+      <button class="btn btn-gold" id="btnDownloadTeam" style="display: flex; align-items: center; gap: 8px;">📸 Descargar Imagen</button>
+    </div>
+
+    <!-- Roster Disponible -->
+    <div class="roster-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+        <h3 style="color: var(--gold);">ROSTER</h3>
+        <input type="text" id="rosterSearch" class="search-input" placeholder="🔍 Buscar Pokémon..." style="width: 250px;">
+      </div>
+      <div class="roster-grid" id="rosterGrid">
+        <!-- Generados por JS -->
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="about.html">Sobre Nosotros</a>
+      <a href="privacy.html">Privacidad</a>
+      <a href="terms.html">Términos</a>
+      <a href="https://www.youtube.com/@gholdengonzaa" target="_blank">YouTube</a>
+    </div>
+    <p>GholdenGonzaa Tools © 2026 · Pokémon Champions Competitivo en Español</p>
+    <p style="margin-top:8px; font-size:0.75rem; opacity:0.6;">Pokémon © Nintendo/Game Freak. Este sitio no está afiliado a The Pokémon Company.</p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/teambuilder.js?v=2"></script>
+</body>
+</html>
