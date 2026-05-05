@@ -5,10 +5,12 @@
  * Sprites from PokeAPI: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{id}.png
  */
 
-const SPRITE_BASE = 'https://cdn.jsdelivr.net/gh/PokeAPI/sprites/master/sprites/pokemon/';
+const SPRITE_BASE = 'https://play.pokemonshowdown.com/sprites/dex/';
 
-function spriteUrl(id) {
-  return `${SPRITE_BASE}${id}.png`;
+function spriteUrl(id, name) {
+  // Showdown usa nombres en minúsculas sin espacios
+  const cleanName = name.toLowerCase().replace(/ /g, '').replace(/-/g, '');
+  return `${SPRITE_BASE}${cleanName}.png`;
 }
 
 const POKEMON_DATA = [

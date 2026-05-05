@@ -29,7 +29,7 @@
 
     const img = document.createElement('img');
     const sid = poke.spriteId || poke.id;
-    img.src = spriteUrl(sid);
+    img.src = spriteUrl(sid, poke.name);
     img.alt = poke.displayName || poke.name;
     img.loading = 'lazy';
     img.onerror = function() { this.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect width="48" height="48" rx="8" fill="%23333"/><text x="24" y="28" text-anchor="middle" fill="%23999" font-size="10">?</text></svg>'; };
