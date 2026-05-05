@@ -5,11 +5,9 @@
  * Sprites from PokeAPI: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{id}.png
  */
 
-const SPRITE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/';
+const SPRITE_BASE = 'https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/';
 
-// Helper to get sprite URL. For regional/alternate forms we use the standard sprite.
 function spriteUrl(id) {
-  // Usamos PokeAPI para TODOS, incluyendo Megas (IDs 10000+)
   return `${SPRITE_BASE}${id}.png`;
 }
 
@@ -101,7 +99,7 @@ const POKEMON_DATA = [
     hasMega: true
   },
   {
-    id: 10090,
+    id: 10070,
     name: "beedrill-mega",
     displayName: "Mega Beedrill",
     types: [
@@ -123,7 +121,7 @@ const POKEMON_DATA = [
     hasMega: true
   },
   {
-    id: 10073,
+    id: 10071,
     name: "pidgeot-mega",
     displayName: "Mega Pidgeot",
     types: [

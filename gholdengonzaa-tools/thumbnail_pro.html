@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Generador de Miniatura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4A017;
+            --violet: #6B21A8;
+            --black: #0A0A0A;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            background: radial-gradient(circle at 70% 30%, var(--violet) 0%, var(--black) 100%);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+            border: 4px solid var(--gold);
+            box-sizing: border-box;
+        }
+        .left {
+            padding-left: 60px;
+            z-index: 10;
+            flex: 1;
+        }
+        h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 140px;
+            line-height: 0.9;
+            margin: 0;
+            color: var(--gold);
+            text-shadow: 10px 10px 0px rgba(0,0,0,0.5), 0 0 50px rgba(212,160,23,0.3);
+            letter-spacing: 4px;
+        }
+        .pro-badge {
+            background: var(--gold);
+            color: black;
+            padding: 10px 30px;
+            font-size: 40px;
+            font-weight: 900;
+            display: inline-block;
+            margin-top: 20px;
+            transform: skew(-10deg);
+        }
+        .right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        /* Una versión simplificada y brillante de la ficha */
+        .card-preview {
+            width: 500px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 100px rgba(212,160,23,0.4);
+            transform: perspective(1000px) rotateY(-15deg) rotateX(5deg);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid rgba(212,160,23,0.3);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .logo { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--gold); background: #000; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .slot {
+            height: 80px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slot img { height: 60px; filter: drop-shadow(0 0 10px var(--gold)); }
+        .floating-poke {
+            position: absolute;
+            width: 250px;
+            filter: drop-shadow(0 0 30px rgba(255,255,255,0.4));
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+    <div class="left">
+        <h1>CÓMO JUGAR<br>COMO PRO</h1>
+        <div class="pro-badge">POKÉMON CHAMPIONS</div>
+    </div>
+    <div class="right">
+        <!-- Pokémon flotando para dar dinamismo -->
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png" class="floating-poke" style="top: -50px; right: 50px; opacity: 0.3;">
+        
+        <div class="card-preview">
+            <div class="header">
+                <div class="logo"></div>
+                <div style="font-family: 'Bebas Neue'; color: var(--gold); font-size: 24px;">GHOLDENGONZAA TOOLS</div>
+            </div>
+            <div class="grid">
+                <div class="slot"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/745-dusk.gif"></div>
+                <div class="slot"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/1017.gif"></div>
+                <div class="slot"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/989.gif"></div>
+                <div class="slot"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/130.gif"></div>
+                <div class="slot"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/212-m.gif"></div>
+                <div class="slot"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/1000.gif"></div>
+            </div>
+            <div style="margin-top: 20px; height: 10px; background: var(--gold); width: 40%; border-radius: 5px;"></div>
+            <div style="margin-top: 10px; height: 30px; display: flex; gap: 5px;">
+                <div style="width: 50px; background: #FF4422; border-radius: 4px;"></div>
+                <div style="width: 50px; background: #4499FF; border-radius: 4px;"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
