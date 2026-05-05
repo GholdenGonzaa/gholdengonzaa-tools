@@ -5,7 +5,7 @@
  * Sprites from PokeAPI: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{id}.png
  */
 
-const SPRITE_BASE = 'https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/';
+const SPRITE_BASE = 'https://cdn.jsdelivr.net/gh/PokeAPI/sprites/master/sprites/pokemon/';
 
 function spriteUrl(id) {
   return `${SPRITE_BASE}${id}.png`;
