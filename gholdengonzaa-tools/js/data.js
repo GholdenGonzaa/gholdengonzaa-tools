@@ -8,8 +8,8 @@
 const SPRITE_BASE = 'https://play.pokemonshowdown.com/sprites/dex/';
 
 function spriteUrl(id, name) {
-  // Showdown usa nombres en minúsculas sin espacios
-  const cleanName = name.toLowerCase().replace(/ /g, '').replace(/-/g, '');
+  // Showdown usa nombres en minúsculas y SIN NINGÚN guion (ej: venusaurmega)
+  const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
   return `${SPRITE_BASE}${cleanName}.png`;
 }
 
