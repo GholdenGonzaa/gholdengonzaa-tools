@@ -8,6 +8,12 @@
 const SPRITE_BASE = 'https://play.pokemonshowdown.com/sprites/dex/';
 
 function spriteUrl(id, name) {
+  // Si no nos pasan el nombre (código viejo), lo buscamos por ID
+  if (!name) {
+    const poke = POKEMON_DATA.find(p => p.id === id);
+    name = poke ? poke.name : 'unknown';
+  }
+  
   // Showdown usa nombres en minúsculas y SIN NINGÚN guion (ej: venusaurmega)
   const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
   return `${SPRITE_BASE}${cleanName}.png`;

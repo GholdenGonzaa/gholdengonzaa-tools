@@ -73,7 +73,7 @@
             <button class="remove-btn" onclick="removeFromTeam(${i})" title="Quitar del equipo">X</button>
             ${megaToggleHtml}
             <a href="counters.html?p=${team[i].id}" title="Ver Counters de ${team[i].displayName || team[i].name}">
-              <img src="${spriteUrl(team[i].id)}" alt="${team[i].name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';">
+              <img src="${spriteUrl(team[i].id, team[i].name)}" alt="${team[i].name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';">
             </a>
           </div>
         `;
@@ -143,7 +143,7 @@
     let headerHtml = '<th>TIPO</th>';
     for (let i = 0; i < 6; i++) {
       if (team[i]) {
-        headerHtml += `<th title="Ver Counters de ${team[i].name}"><a href="counters.html?p=${team[i].id}"><img src="${spriteUrl(team[i].id)}" class="team-header-img" alt="${team[i].name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';"></a></th>`;
+        headerHtml += `<th title="Ver Counters de ${team[i].name}"><a href="counters.html?p=${team[i].id}"><img src="${spriteUrl(team[i].id, team[i].name)}" class="team-header-img" alt="${team[i].name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';"></a></th>`;
       } else {
         headerHtml += `<th><div class="team-header-img" style="opacity:0.2;">?</div></th>`;
       }
@@ -207,7 +207,7 @@
       const index = POKEMON_DATA.indexOf(p);
       return `
         <div class="roster-poke" onclick="addToTeam(${index})" title="${name}">
-          <img src="${spriteUrl(p.id)}" loading="lazy" alt="${name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';">
+          <img src="${spriteUrl(p.id, p.name)}" loading="lazy" alt="${name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';">
           <span>${name}</span>
         </div>
       `;
@@ -258,7 +258,7 @@
         if (team[i]) {
           sharePokes.innerHTML += `
             <div class="share-poke-item">
-              <img src="${spriteUrl(team[i].id)}" alt="${team[i].name}">
+              <img src="${spriteUrl(team[i].id, team[i].name)}" alt="${team[i].name}">
               <div class="share-poke-name">${team[i].displayName || team[i].name}</div>
             </div>
           `;

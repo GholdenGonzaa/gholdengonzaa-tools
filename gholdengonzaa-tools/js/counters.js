@@ -86,7 +86,7 @@
     }
 
     pokeInfo.innerHTML = `
-      <img src="${spriteUrl(poke.id)}" alt="${name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';">
+      <img src="${spriteUrl(poke.id, poke.name)}" alt="${name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';">
       <h2>${name}</h2>
       <div>${typeHtml}</div>
       ${megaBtnHtml}
